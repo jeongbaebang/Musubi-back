@@ -1,4 +1,4 @@
 {
-  "*.+(ts|tsx)": ["eslint --fix", "git add"],
-  "*.+(ts|tsx|json|css|html|md)": ["prettier --write", "git add"]
+  "*.+(ts)": ["eslint --fix", "git add"],
+  "*.+(ts|json|css|html|md)": ["prettier --write", "git add"]
 }
