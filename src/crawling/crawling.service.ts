@@ -10,7 +10,7 @@ import { v1 as uuid } from 'uuid';
 export class CrawlingService {
   constructor(
     @InjectRepository(CrawlingRepository)
-    private userRepository: CrawlingRepository,
+    private crawlingRepository: CrawlingRepository,
   ) {}
 
   private async getHtml(URL: string) {
@@ -59,6 +59,9 @@ export class CrawlingService {
     this.getHtml('https://okky.kr/articles/gathering')
       .then(getListId)
       .then(getDetailContentList)
+      .then((items) => {
+        items.forEach((item) => this.crawlingRepository.createContent(item));
+      })
       .catch(console.error);
   }
 }
