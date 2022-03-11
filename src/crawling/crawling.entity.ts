@@ -1,16 +1,16 @@
-import { Entity, PrimaryGeneratedColumn, BaseEntity, Column } from 'typeorm';
+import { Entity, BaseEntity, Column, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class Crawling extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column()
-  uuid: string;
+  @PrimaryColumn()
+  id: string;
 
   @Column()
   title: string;
 
   @Column()
   content: string;
+
+  @Column()
+  currentTime: Date;
 }

@@ -1,4 +1,4 @@
-export interface ContentList {
+export interface Content {
   id: string;
   title: string;
   content: string;

@@ -1,11 +1,18 @@
-import { ContentList } from './crawing.types';
+import { CrawlingRepository } from './crawling.repository';
+import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
+import { Content } from './crawing.types';
 
 import * as cheerio from 'cheerio';
 import axios from 'axios';
 import { v1 as uuid } from 'uuid';
 @Injectable()
 export class CrawlingService {
+  constructor(
+    @InjectRepository(CrawlingRepository)
+    private userRepository: CrawlingRepository,
+  ) {}
+
   private async getHtml(URL: string) {
     return await axios.get(URL);
   }
@@ -30,7 +37,7 @@ export class CrawlingService {
     };
 
     const getDetailContentList = async (data: { listId: string }[]) => {
-      const detailContentList: ContentList[] = [];
+      const detailContentList: Content[] = [];
 
       const pending = data.map(({ listId }) =>
         this.getHtml(`https://okky.kr/article/${listId}`),
@@ -49,7 +56,7 @@ export class CrawlingService {
       return detailContentList;
     };
 
-    return this.getHtml('https://okky.kr/articles/gathering')
+    this.getHtml('https://okky.kr/articles/gathering')
       .then(getListId)
       .then(getDetailContentList)
       .catch(console.error);
