@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common';
 
 import * as cheerio from 'cheerio';
 import axios from 'axios';
-
+import { v1 as uuid } from 'uuid';
 @Injectable()
 export class CrawlingService {
   private async getHtml(URL: string) {
@@ -40,7 +40,7 @@ export class CrawlingService {
         const $bodyList = this.$(data)('#content-body');
 
         detailContentList[index] = {
-          id: index,
+          id: uuid(),
           title: $bodyList.find('h2.panel-title').text(),
           content: $bodyList.children('article').html(),
         };
