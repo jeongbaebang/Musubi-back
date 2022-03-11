@@ -1,7 +1,7 @@
 import { CrawlingRepository } from './crawling.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
-import { Content } from './crawing.types';
+import { Content, ListId } from './crawing.types';
 
 import * as cheerio from 'cheerio';
 import axios from 'axios';
@@ -23,7 +23,7 @@ export class CrawlingService {
 
   startCrawling() {
     const getListId = ({ data }) => {
-      const listId: { listId: string }[] = [];
+      const listId: ListId[] = [];
 
       this.$(data)('div.gathering-panel ul li')
         .find('span.article-id')
@@ -36,10 +36,10 @@ export class CrawlingService {
       return listId;
     };
 
-    const getDetailContentList = async (data: { listId: string }[]) => {
+    const getDetailContentList = async (listid: ListId[]) => {
       const detailContentList: Content[] = [];
 
-      const pending = data.map(({ listId }) =>
+      const pending = listid.map(({ listId }) =>
         this.getHtml(`https://okky.kr/article/${listId}`),
       );
 
