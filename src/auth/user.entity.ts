@@ -2,12 +2,14 @@ import {
   BaseEntity,
   Column,
   Entity,
+  Unique,
   CreateDateColumn,
   UpdateDateColumn,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity({ name: 'TMI_USER_M' })
+@Unique(['username'])
 export class User extends BaseEntity {
   @PrimaryGeneratedColumn({ name: 'N_USER_NO' })
   id: number;

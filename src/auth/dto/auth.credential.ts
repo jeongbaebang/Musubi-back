@@ -1,6 +1,6 @@
 import { IsString, Matches, MaxLength, MinLength } from 'class-validator';
 
-const validationTest = {
+export const validationTest = {
   email: {
     RegExp:
       /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i,
@@ -13,6 +13,9 @@ const validationTest = {
   },
   maxLength: {
     message: '최대 길이는 50글자 미만입니다.' as const,
+  },
+  duplicateUsername: {
+    message: '존재하는 사용자 이름입니다.' as const,
   },
 };
 
