@@ -5,8 +5,8 @@ import { Controller, Get } from '@nestjs/common';
 export class CrawlingController {
   constructor(private crawlingService: CrawlingService) {}
 
-  @Get('/test')
+  @Get('/okky')
   test() {
-    return this.crawlingService.startCrawling();
+    return this.crawlingService.okkyStartCrawling();
   }
 }

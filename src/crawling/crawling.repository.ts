@@ -1,12 +1,27 @@
 import { Content } from './crawing.types';
-import { Crawling } from './crawling.entity';
+import { TMI_OTH_PRJ_M } from './crawling.entity';
 import { EntityRepository, Repository } from 'typeorm';
 
-@EntityRepository(Crawling)
-export class CrawlingRepository extends Repository<Crawling> {
-  async createContent({ id, title, content }: Content): Promise<void> {
-    const currentTime = new Date();
-    const contentItem = this.create({ id, title, content, currentTime });
+@EntityRepository(TMI_OTH_PRJ_M)
+export class CrawlingRepository extends Repository<TMI_OTH_PRJ_M> {
+  async createContent({
+    V_OTH_PRJ_ID,
+    V_OTH_TITLE,
+    T_OTH_CONTENT,
+    V_SITE_GUBUN,
+    V_OTH_URL,
+    V_REG_NM,
+    D_REG_DTM,
+  }: Content): Promise<void> {
+    const contentItem = this.create({
+      V_OTH_PRJ_ID,
+      V_OTH_TITLE,
+      T_OTH_CONTENT,
+      V_SITE_GUBUN,
+      V_OTH_URL,
+      V_REG_NM,
+      D_REG_DTM,
+    });
 
     await this.save(contentItem);
   }

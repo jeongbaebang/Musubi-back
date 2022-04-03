@@ -1,16 +1,25 @@
 import { Entity, BaseEntity, Column, PrimaryColumn } from 'typeorm';
 
-@Entity()
-export class Crawling extends BaseEntity {
+@Entity({ name: 'TMI_OTH_PRJ_M' })
+export class TMI_OTH_PRJ_M extends BaseEntity {
   @PrimaryColumn()
-  id: string;
+  V_OTH_PRJ_ID: string;
 
   @Column()
-  title: string;
+  V_OTH_TITLE: string;
+
+  @Column('mediumtext')
+  T_OTH_CONTENT: string;
+
+  @Column('char')
+  V_SITE_GUBUN: string;
 
   @Column()
-  content: string;
+  V_OTH_URL: string;
 
   @Column()
-  currentTime: Date;
+  V_REG_NM: string;
+
+  @Column()
+  D_REG_DTM: Date;
 }
