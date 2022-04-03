@@ -6,7 +6,12 @@ export class CrawlingController {
   constructor(private crawlingService: CrawlingService) {}
 
   @Get('/okky')
-  test() {
+  okkyStartCrawling() {
     return this.crawlingService.okkyStartCrawling();
+  }
+
+  @Get('/inflearn')
+  inflearnStartCrawling() {
+    return this.crawlingService.inflearnStartCrawling();
   }
 }
