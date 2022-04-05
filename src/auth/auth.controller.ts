@@ -8,7 +8,6 @@ import { AuthCredentialsDto } from './dto/auth.credential';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  // register
   @Post('/signup')
   signUp(
     @Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto,
@@ -16,7 +15,6 @@ export class AuthController {
     return this.authService.signUp(authCredentialsDto);
   }
 
-  // Login
   @Post('/signin')
   signIn(
     @Body(ValidationPipe) authCredentialsDto: AuthCredentialsDto,
