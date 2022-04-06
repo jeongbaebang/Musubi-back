@@ -1,7 +1,7 @@
 import { CrawlingRepository } from './crawling.repository';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
-import { Content, ListId } from './crawing.types';
+import { Content, ListId, crawingPage } from './crawing.types';
 
 import * as cheerio from 'cheerio';
 import axios from 'axios';
@@ -65,13 +65,21 @@ export class CrawlingService {
       return detailContentList;
     };
 
-    this.getHtml('https://okky.kr/articles/gathering')
-      .then(getListId)
-      .then(getDetailContentList)
-      .then((items) => {
-        items.forEach((item) => this.crawlingRepository.createContent(item));
-      })
-      .catch(console.error);
+    let listCnt = 0;
+
+    for (let i = 0; i < crawingPage.okky; i++) {
+      listCnt = 24 * i;
+
+      this.getHtml(
+        `https://okky.kr/articles/gathering?offset=${listCnt}&max=24&sort=id&order=desc`,
+      )
+        .then(getListId)
+        .then(getDetailContentList)
+        .then((items) => {
+          items.forEach((item) => this.crawlingRepository.createContent(item));
+        })
+        .catch(console.error);
+    }
   }
 
   inflearnStartCrawling() {
@@ -112,14 +120,20 @@ export class CrawlingService {
       return detailContentList;
     };
 
-    this.getHtml(
-      'https://www.inflearn.com/community/studies?status=unrecruited',
-    )
-      .then(getListId)
-      .then(getDetailContentList)
-      .then((items) => {
-        items.forEach((item) => this.crawlingRepository.createContent(item));
-      })
-      .catch(console.error);
+    let pageCnt = 0;
+
+    for (let i = 0; i < crawingPage.inflrean; i++) {
+      pageCnt = i + 1;
+
+      this.getHtml(
+        `https://www.inflearn.com/community/studies?page=${pageCnt}&status=unrecruited`,
+      )
+        .then(getListId)
+        .then(getDetailContentList)
+        .then((items) => {
+          items.forEach((item) => this.crawlingRepository.createContent(item));
+        })
+        .catch(console.error);
+    }
   }
 }

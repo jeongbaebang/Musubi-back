@@ -11,4 +11,9 @@ export interface Content {
 export interface ListId {
   listId: string;
 }
+
+export enum crawingPage {
+  okky = 10,
+  inflrean = 5,
+}
 //5
