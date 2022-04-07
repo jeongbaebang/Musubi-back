@@ -1,11 +1,14 @@
 import { CrawlingRepository } from './crawling.repository';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Content, ListId, crawingPage } from './crawing.types';
 
 import * as cheerio from 'cheerio';
 import axios from 'axios';
 import { v1 as uuid } from 'uuid';
+
+import { Cron, CronExpression } from '@nestjs/schedule';
+
 @Injectable()
 export class CrawlingService {
   constructor(
@@ -19,6 +22,27 @@ export class CrawlingService {
 
   private $(data: string | cheerio.Node | cheerio.Node[] | Buffer) {
     return cheerio.load(data);
+  }
+
+  private readonly logger = new Logger(CrawlingService.name);
+
+  @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT, {
+    name: 'crawlingSchedule',
+    timeZone: 'Asia/Seoul',
+  })
+  crawlingSchedule() {
+    function* generateSequence(_this) {
+      yield _this.deleteAllCrawlingData();
+      yield _this.okkyStartCrawling();
+      yield _this.inflearnStartCrawling();
+    }
+
+    const generator = generateSequence(this);
+
+    for (const value of generator) {
+    }
+
+    this.logger.warn('Called crawlingSchedule done');
   }
 
   okkyStartCrawling() {
@@ -76,7 +100,9 @@ export class CrawlingService {
         .then(getListId)
         .then(getDetailContentList)
         .then((items) => {
-          items.forEach((item) => this.crawlingRepository.createContent(item));
+          items.forEach((item) =>
+            this.crawlingRepository.createCrawlingData(item),
+          );
         })
         .catch(console.error);
     }
@@ -131,9 +157,14 @@ export class CrawlingService {
         .then(getListId)
         .then(getDetailContentList)
         .then((items) => {
-          items.forEach((item) => this.crawlingRepository.createContent(item));
+          items.forEach((item) =>
+            this.crawlingRepository.createCrawlingData(item),
+          );
         })
         .catch(console.error);
     }
+  }
+  deleteAllCrawlingData() {
+    this.crawlingRepository.deleteCrawlingData();
   }
 }

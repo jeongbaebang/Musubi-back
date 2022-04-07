@@ -4,7 +4,7 @@ import { EntityRepository, Repository } from 'typeorm';
 
 @EntityRepository(TMI_OTH_PRJ_M)
 export class CrawlingRepository extends Repository<TMI_OTH_PRJ_M> {
-  async createContent({
+  async createCrawlingData({
     V_OTH_PRJ_ID,
     V_OTH_TITLE,
     T_OTH_CONTENT,
@@ -24,5 +24,8 @@ export class CrawlingRepository extends Repository<TMI_OTH_PRJ_M> {
     });
 
     await this.save(contentItem);
+  }
+  async deleteCrawlingData(): Promise<void> {
+    await this.clear();
   }
 }

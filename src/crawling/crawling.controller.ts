@@ -1,17 +1,27 @@
 import { CrawlingService } from './crawling.service';
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post } from '@nestjs/common';
+import { SchedulerRegistry } from '@nestjs/schedule';
 
 @Controller('crawling')
 export class CrawlingController {
-  constructor(private crawlingService: CrawlingService) {}
+  constructor(
+    private crawlingService: CrawlingService,
+    private scheduler: SchedulerRegistry,
+  ) {}
 
-  @Get('/okky')
-  okkyStartCrawling() {
-    return this.crawlingService.okkyStartCrawling();
+  @Get('/start')
+  start() {
+    const job = this.scheduler.getCronJob('crawlingSchedule');
+
+    job.start();
+    console.log('crawlingSchedule start! ', job.lastDate());
   }
 
-  @Get('/inflearn')
-  inflearnStartCrawling() {
-    return this.crawlingService.inflearnStartCrawling();
+  @Get('/stop')
+  stop() {
+    const job = this.scheduler.getCronJob('crawlingSchedule');
+
+    job.stop();
+    console.log('crawlingSchedule stopped! ', job.lastDate());
   }
 }
