@@ -27,19 +27,20 @@ export class CrawlingService {
   private readonly logger = new Logger(CrawlingService.name);
 
   @Cron(CronExpression.EVERY_DAY_AT_MIDNIGHT, {
+    // '45 * * * * *'
     name: 'crawlingSchedule',
     timeZone: 'Asia/Seoul',
   })
-  crawlingSchedule() {
+  async crawlingSchedule() {
     function* generateSequence(_this) {
-      yield _this.deleteAllCrawlingData();
+      yield _this.deleteAllData();
       yield _this.okkyStartCrawling();
       yield _this.inflearnStartCrawling();
     }
 
     const generator = generateSequence(this);
 
-    for (const value of generator) {
+    for await (const value of generator) {
     }
 
     this.logger.warn('Called crawlingSchedule done');
@@ -164,7 +165,18 @@ export class CrawlingService {
         .catch(console.error);
     }
   }
-  deleteAllCrawlingData() {
-    this.crawlingRepository.deleteCrawlingData();
+  deleteAllData() {
+    this.crawlingRepository.deleteAllData();
+  }
+
+  selectAllData() {
+    return this.crawlingRepository.selectAllData();
+  }
+
+  getOkkyData() {
+    return this.crawlingRepository.getOkkyData();
+  }
+  getInFlearnData() {
+    return this.crawlingRepository.getInFlearnData();
   }
 }

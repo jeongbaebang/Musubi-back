@@ -25,7 +25,17 @@ export class CrawlingRepository extends Repository<TMI_OTH_PRJ_M> {
 
     await this.save(contentItem);
   }
-  async deleteCrawlingData(): Promise<void> {
+  async deleteAllData(): Promise<void> {
     await this.clear();
+  }
+
+  async getInFlearnData() {
+    return await this.find({ V_SITE_GUBUN: 'I' });
+  }
+  async getOkkyData() {
+    return await this.find({ V_SITE_GUBUN: 'O' });
+  }
+  async selectAllData() {
+    return await this.find();
   }
 }

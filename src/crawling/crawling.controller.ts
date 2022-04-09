@@ -24,4 +24,19 @@ export class CrawlingController {
     job.stop();
     console.log('crawlingSchedule stopped! ', job.lastDate());
   }
+
+  @Get('/dataAll')
+  dataAll() {
+    return this.crawlingService.selectAllData();
+  }
+
+  @Get('/dataOkky')
+  dataOkky() {
+    return this.crawlingService.getOkkyData();
+  }
+
+  @Get('/dataInflearn')
+  dataInflearn() {
+    return this.crawlingService.getInFlearnData();
+  }
 }
