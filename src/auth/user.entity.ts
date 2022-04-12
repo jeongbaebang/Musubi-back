@@ -1,8 +1,8 @@
 import {
-  BaseEntity,
   Column,
   Entity,
   Unique,
+  BaseEntity,
   CreateDateColumn,
   UpdateDateColumn,
   PrimaryGeneratedColumn,

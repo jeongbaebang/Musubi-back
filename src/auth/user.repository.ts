@@ -22,7 +22,7 @@ export class UserRepository extends Repository<User> {
        * @see https://dev.mysql.com/doc/mysql-errors/8.0/en/server-error-reference.html#error_er_dup_entry
        */
       if (error.errno === 1062) {
-        throw new ConflictException(validationTest.login.duplicate);
+        throw new ConflictException([validationTest.login.duplicate.message]);
       } else {
         throw new InternalServerErrorException();
       }

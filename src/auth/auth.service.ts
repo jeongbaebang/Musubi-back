@@ -6,6 +6,8 @@ import * as bcrypt from 'bcryptjs';
 
 import { AuthCredentialsDto, validationTest } from './dto/auth.credential';
 import { UserRepository } from './user.repository';
+import { createAuthCookie } from 'src/lib/cookies';
+import { User } from './user.entity';
 
 @Injectable()
 export class AuthService {
@@ -15,29 +17,31 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  signUp(authCredentialsDto: AuthCredentialsDto): Promise<void> {
-    return this.userRepository.createUser(authCredentialsDto);
+  private async isUser(user: User, bodyPassword: string) {
+    return Boolean(user && (await bcrypt.compare(bodyPassword, user.password)));
+  }
+
+  private createToken(user: User) {
+    return this.jwtService.sign({ username: user.username });
+  }
+
+  async signUp(authCredentialsDto: AuthCredentialsDto, response: Response) {
+    await this.userRepository.createUser(authCredentialsDto);
+    return await this.signIn(authCredentialsDto, response);
   }
 
   async signIn({ username, password }: AuthCredentialsDto, response: Response) {
     const user = await this.userRepository.findOne({ username });
 
-    if (user && (await bcrypt.compare(password, user.password))) {
-      const TOKEN = this.jwtService.sign({ username });
-
-      response.cookie('Authentication', TOKEN, {
-        //TODO: 배포시 .env 파일에 보관할것
-        maxAge: 86400000, // 1d
-        httpOnly: true,
-      });
+    if (await this.isUser(user, password)) {
+      createAuthCookie(response, this.createToken(user));
 
       return {
-        message: validationTest.login.success,
-        user,
-        token: TOKEN,
+        message: [validationTest.login.success.message],
+        user: user.username,
       };
     } else {
-      throw new UnauthorizedException(validationTest.login.failure);
+      throw new UnauthorizedException([validationTest.login.failure.message]);
     }
   }
 }
